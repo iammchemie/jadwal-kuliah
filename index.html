@@ -973,14 +973,15 @@
   /* =====================================================================
      KONFIGURASI SEMESTER
      ---------------------------------------------------------------------
-     SEMESTER_START = tanggal Senin pada minggu ke-1 semester, format
-     "YYYY-MM-DD" (contoh: "2026-09-07").
+     SEMESTER_START = hari pertama semester, format "YYYY-MM-DD".
+     Semester 20261 mulai Rabu 30 September 2026; minggu ke-1 dihitung
+     sebagai minggu kalender yang memuat tanggal itu (Senin 28 Sep 2026).
 
      Selama nilainya null, nomor minggu TIDAK dihitung dan halaman hanya
-     menampilkan "Minggu ke-?" — tidak ada angka yang dikarang. Isi satu
-     baris di bawah setelah tanggal resmi dari SIAKAD dikonfirmasi.
+     menampilkan "Minggu ke-?" — tidak ada angka yang dikarang. Kalau
+     tanggal resmi berubah, cukup ubah satu baris ini.
      ===================================================================== */
-  var SEMESTER_START = null;
+  var SEMESTER_START = "2026-09-30";
 
   var DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   var SHORT = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
