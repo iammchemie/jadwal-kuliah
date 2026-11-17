@@ -78,6 +78,7 @@
   }
   [hidden] { display: none !important; }
   h1, h2, h3 { font-weight: 500; }
+  button { font-family: inherit; }
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
@@ -112,25 +113,47 @@
     line-height: 20px;
     color: var(--ink-11);
   }
-
-  .theme {
+  .head-actions {
     flex: none;
-    display: grid;
-    place-items: center;
-    width: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .theme,
+  .cal-toggle,
+  .btn,
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     height: 36px;
-    padding: 0;
-    margin-top: 2px;
+    padding: 0 12px;
+    margin: 0;
     border: 0;
     border-radius: 6px;
     background: var(--control-bg);
     color: var(--ink-11);
-    font: inherit;
+    font-size: 13px;
+    line-height: 20px;
     font-weight: 500;
     box-shadow: var(--control-shadow);
     cursor: pointer;
     -webkit-appearance: none;
     appearance: none;
+    transition: color 150ms var(--ease);
+  }
+  .theme:hover,
+  .cal-toggle:hover,
+  .btn:hover,
+  .icon-btn:hover { color: var(--ink-12); }
+
+  .theme {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    padding: 0;
   }
   .theme svg {
     grid-area: 1 / 1;
@@ -141,13 +164,23 @@
   .theme .icon-moon { opacity: 0; }
   [data-theme="dark"] .theme .icon-sun { opacity: 0; }
   [data-theme="dark"] .theme .icon-moon { opacity: 1; }
-  .theme:hover { color: var(--ink-12); }
+
+  .cal-toggle svg { flex: none; }
+  .cal-toggle[aria-expanded="true"] { color: var(--ink-12); }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    box-shadow: inset 0 0 0 0.5px var(--line);
+    background: transparent;
+  }
 
   /* ---------- next class ---------- */
   .next-band { border-bottom: 0.5px solid var(--line); }
   .next {
     margin: 0;
-    padding: 16px 0;
+    padding: 16px 0 10px;
     font-size: 13px;
     line-height: 20px;
     color: var(--ink-11);
@@ -171,6 +204,45 @@
   .next.live .course { color: var(--ink-12); }
   .next.live .dot { background: var(--green-9); }
 
+  /* ---------- countdown strip ---------- */
+  .countdown {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0 0 16px;
+    border-top: 0.5px solid var(--line);
+  }
+  .c-cell { min-width: 0; padding: 12px 20px 0 0; }
+  .c-cell + .c-cell {
+    padding-left: 20px;
+    border-left: 0.5px solid var(--line);
+  }
+  .c-cell:last-child { padding-right: 0; }
+  .countdown dt {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .countdown dd { margin: 0; }
+  .countdown .value {
+    margin: 2px 0;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--ink-12);
+  }
+  .countdown .detail {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .countdown .detail b {
+    font-weight: 500;
+    color: var(--ink-12);
+  }
+  .c-cell.live dt,
+  .c-cell.live .value { color: var(--green-11); }
+  .c-cell.idle .value { color: var(--ink-10); }
+
   /* ---------- week index ---------- */
   .week {
     display: grid;
@@ -185,8 +257,18 @@
     flex-direction: column;
     justify-content: space-between;
     min-height: 52px;
-    padding-bottom: 6px;
+    padding: 0 0 6px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    font-size: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 150ms var(--ease);
   }
+  .week-cell:hover { background: var(--ink-2); }
   .week-cell .wd {
     font-size: 12px;
     line-height: 16px;
@@ -199,7 +281,7 @@
   }
   .week-cell.empty .wd,
   .week-cell.empty .n { color: var(--ink-10); }
-  .week-cell.today { border-bottom: 2px solid var(--ink-12); }
+  .week-cell.today { border-bottom-color: var(--ink-12); }
 
   /* ---------- day sections ---------- */
   .day-block { margin: 0 0 40px; }
@@ -327,6 +409,239 @@
   .class.past .meta-row .code,
   .class.past .meta-row .room { color: var(--ink-12); }
 
+  /* ---------- calendar ---------- */
+  .cal {
+    border-bottom: 0.5px solid var(--line);
+    scroll-margin-top: 16px;
+  }
+  .cal-inner { padding: 20px 0 28px; }
+  .cal-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 24px;
+    flex-wrap: wrap;
+  }
+  .cal-bar h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--ink-12);
+  }
+  .cal-week {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .cal-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 14px 0 18px;
+  }
+  .seg {
+    display: inline-flex;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 0.5px var(--line);
+  }
+  .seg button {
+    height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink-11);
+    font-size: 13px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: color 150ms var(--ease), background-color 150ms var(--ease);
+  }
+  .seg button:first-child { border-radius: 6px 0 0 6px; }
+  .seg button:last-child { border-radius: 0 6px 6px 0; }
+  .seg button:hover { color: var(--ink-12); }
+  .seg button[aria-pressed="true"] {
+    background: var(--ink-3);
+    color: var(--ink-12);
+  }
+  .cal-nav { display: flex; align-items: center; gap: 8px; }
+  .cal-nav .btn { height: 32px; padding: 0 12px; }
+
+  .cal-dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding-bottom: 6px;
+    border-bottom: 0.5px solid var(--line);
+  }
+  .cal-dow span {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-top: 4px;
+  }
+  .cal-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+    min-height: 76px;
+    padding: 6px 6px 8px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink-12);
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 150ms var(--ease);
+  }
+  .cal-cell:hover { background: var(--ink-2); }
+  .cal-cell .num {
+    font-size: 13px;
+    line-height: 20px;
+    border-bottom: 2px solid transparent;
+  }
+  .cal-cell.out { color: var(--ink-10); }
+  .cal-cell.today .num { border-bottom-color: var(--ink-12); }
+  .cal-cell.sel { background: var(--ink-3); }
+  .cal-cell .mk {
+    font-size: 11px;
+    line-height: 14px;
+    color: var(--ink-11);
+    white-space: nowrap;
+  }
+  .cal-cell .mk + .mk { margin-top: 1px; }
+  .cal-cell .num + .mk { color: var(--ink-12); }
+
+  .cal-detail {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 0.5px solid var(--line);
+  }
+  .cd-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .cd-head h3 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--ink-12);
+  }
+  .cd-meta {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .cd-actions { display: flex; align-items: center; gap: 8px; }
+  .cd-actions .btn { height: 30px; padding: 0 10px; font-size: 12px; }
+  .cd-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cd-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 12px;
+    padding: 8px 0;
+    border-top: 0.5px solid var(--line);
+  }
+  .cd-list .t {
+    width: 104px;
+    flex: none;
+    color: var(--ink-11);
+  }
+  .cd-list .nm { color: var(--ink-12); }
+  .cd-list .rm { margin-left: auto; color: var(--ink-11); }
+  .cd-empty {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--ink-11);
+  }
+
+  .cw {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+  }
+  .cw-day {
+    min-width: 0;
+    min-height: 132px;
+    padding: 8px 8px 12px 0;
+    border-top: 0.5px solid var(--line);
+  }
+  .cw-day.today { border-top: 2px solid var(--ink-12); }
+  .cw-head {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .cw-head .wd {
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .cw-head .d {
+    display: block;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--ink-12);
+  }
+  .cw-head .n {
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-11);
+  }
+  .cw-day.today .wd { color: var(--ink-12); }
+  .cw-day.empty .d { color: var(--ink-10); }
+  .cw-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cw-list li {
+    padding: 6px 0 0;
+    margin-top: 6px;
+    border-top: 0.5px solid var(--line);
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .cw-list .t {
+    display: block;
+    color: var(--ink-11);
+  }
+  .cw-list .nm {
+    display: block;
+    margin-top: 1px;
+    color: var(--ink-12);
+  }
+  .cw-list .rm {
+    display: block;
+    color: var(--ink-11);
+  }
+
   /* ---------- empty days ---------- */
   .no-class { margin: 0 0 40px; }
   .no-class .label {
@@ -357,27 +672,94 @@
   @media (max-width: 47.99rem) {
     .wrap { width: calc(100% - 40px); }
     body { font-size: 15px; line-height: 24px; }
+    .head-inner { flex-wrap: wrap; gap: 12px; }
+    .head-actions { margin-left: auto; }
+    h1 { font-size: 28px; line-height: 36px; }
     .head-meta,
     .next,
     .day-head .count,
-    .week-cell .wd,
-    .week-cell .n,
     .no-class .label { font-size: 15px; line-height: 20px; }
-    .theme { width: 44px; height: 44px; margin-top: 0; }
-    .next { padding: 16px 0; }
+    .theme { width: 44px; height: 44px; }
+    .cal-toggle { height: 44px; font-size: 14px; }
+    .cal-toggle svg { width: 18px; height: 18px; }
     .week { gap: 4px; }
-    .class { grid-template-columns: 76px 1px minmax(0, 1fr); }
-    .slot { padding: 20px 12px 20px 0; }
+    .week-cell { min-height: 56px; }
+    .week-cell .wd { font-size: 12px; line-height: 16px; }
+    .week-cell .n { font-size: 13px; line-height: 20px; }
+
+    .countdown {
+      grid-template-columns: 1fr;
+      padding-bottom: 4px;
+      border-top: 0;
+    }
+    .c-cell { padding: 12px 0; border-top: 0.5px solid var(--line); }
+    .c-cell + .c-cell { padding-left: 0; border-left: 0; }
+    .c-cell:last-child { padding-bottom: 14px; }
+    .countdown dt { font-size: 13px; line-height: 18px; }
+    .countdown .value { margin: 2px 0; }
+    .countdown .detail { font-size: 13px; line-height: 18px; }
+
+    .class { grid-template-columns: 96px 1px minmax(0, 1fr); }
+    .slot { padding: 20px 8px 20px 0; }
+    .slot .len { font-size: 11px; line-height: 14px; white-space: nowrap; }
     .body { padding: 20px 0 20px 16px; }
-    .meta-row,
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 12px;
+      font-size: 15px;
+      line-height: 20px;
+    }
+    .meta-row > *:not(:last-child)::after { content: none; }
     .lecturer { font-size: 15px; line-height: 20px; }
     .lecturer { line-height: 24px; }
     .no-class p:last-child { font-size: 15px; line-height: 24px; }
     .foot { flex-direction: column; gap: 4px; padding-bottom: 32px; }
+
+    .cal-bar h2 { font-size: 18px; line-height: 26px; }
+    .cal-week { font-size: 13px; line-height: 18px; }
+    .cal-controls { flex-direction: column; align-items: stretch; gap: 10px; }
+    .seg { align-self: flex-start; }
+    .seg button { height: 44px; padding: 0 16px; font-size: 14px; }
+    .cal-nav { margin-left: 0; justify-content: space-between; }
+    .cal-nav .btn { height: 44px; font-size: 14px; }
+    .cal-nav .icon-btn { width: 44px; height: 44px; }
+    .cal-dow span { font-size: 11px; line-height: 14px; }
+    .cal-grid { gap: 0; }
+    .cal-cell { min-height: 62px; padding: 4px 3px 6px; }
+    .cal-cell .num { font-size: 13px; line-height: 18px; }
+    .cal-cell .mk { font-size: 10px; line-height: 13px; }
+
+    .cw { grid-template-columns: 1fr; gap: 0; }
+    .cw-day {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 12px;
+      min-height: 0;
+      padding: 12px 0;
+      border-top: 0.5px solid var(--line);
+    }
+    .cw-day.today { border-top: 2px solid var(--ink-12); }
+    .cw-list { margin: 0; }
+    .cw-list li:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+    .cw-list .t { display: inline; margin-right: 8px; }
+    .cw-list .nm { display: inline; }
+    .cw-list .rm { display: inline; margin-left: 4px; }
+    .cw-list .rm::before { content: "· "; color: var(--ink-10); }
+
+    .cd-list .t { width: 100%; }
+    .cd-list .rm { margin-left: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .class, .theme svg { transition: none; }
+    .class,
+    .theme svg,
+    .week-cell,
+    .cal-cell,
+    .seg button,
+    .btn,
+    .icon-btn,
+    .cal-toggle { transition: none; }
   }
 
   @page { margin: 12mm; }
@@ -394,7 +776,7 @@
       --green-3: transparent;
       --green-11: #000;
     }
-    .theme, .next-band { display: none; }
+    .theme, .cal-toggle, .next-band, .cal { display: none; }
     body { background: #fff; color: #000; font-size: 9.5pt; line-height: 1.45; }
     .week, .day-block, .class, .foot { break-inside: avoid; }
     .week { margin: 18px 0 26px; }
@@ -415,10 +797,16 @@
       <h1>Jadwal Kuliah</h1>
       <p class="head-meta">Semester 20261 · 2026/2027 Ganjil · 3 mata kuliah · 9 SKS</p>
     </div>
-    <button class="theme" id="toggle" type="button" aria-label="Ganti tema terang/gelap" title="Ganti tema">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-    </button>
+    <div class="head-actions">
+      <button class="cal-toggle" id="cal-toggle" type="button" aria-expanded="false" aria-controls="calendar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15"/><path d="M3.5 9.75h17M8.5 3.5v3M15.5 3.5v3"/></svg>
+        <span>Kalender</span>
+      </button>
+      <button class="theme" id="toggle" type="button" aria-label="Ganti tema terang/gelap" title="Ganti tema">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -429,8 +817,62 @@
       <span class="next-text" id="status-text">Memuat jadwal…</span>
       <span class="next-when" id="status-when"></span>
     </p>
+
+    <dl class="countdown" id="countdown">
+      <div class="c-cell" id="cell-next">
+        <dt>Berikutnya</dt>
+        <dd class="value" id="next-val">—</dd>
+        <dd class="detail" id="next-detail"></dd>
+      </div>
+      <div class="c-cell idle" id="cell-live">
+        <dt>Sedang berlangsung</dt>
+        <dd class="value" id="live-val">—</dd>
+        <dd class="detail" id="live-detail"></dd>
+      </div>
+      <div class="c-cell idle" id="cell-after">
+        <dt>Jeda setelahnya</dt>
+        <dd class="value" id="after-val">—</dd>
+        <dd class="detail" id="after-detail"></dd>
+      </div>
+    </dl>
   </div>
 </div>
+
+<section class="cal" id="calendar" hidden aria-labelledby="cal-title">
+  <div class="wrap cal-inner">
+    <div class="cal-bar">
+      <h2 id="cal-title">Kalender</h2>
+      <p class="cal-week" id="cal-week"></p>
+    </div>
+
+    <div class="cal-controls">
+      <div class="seg" role="group" aria-label="Tampilan kalender">
+        <button type="button" data-view="month" aria-pressed="true">Bulan</button>
+        <button type="button" data-view="week" aria-pressed="false">Minggu</button>
+      </div>
+      <div class="cal-nav">
+        <button class="icon-btn" id="cal-prev" type="button" aria-label="Sebelumnya">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+        </button>
+        <button class="btn" id="cal-today" type="button">Hari ini</button>
+        <button class="icon-btn" id="cal-next" type="button" aria-label="Berikutnya">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="cal-month">
+      <div class="cal-dow" aria-hidden="true">
+        <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div id="cal-weekview" hidden></div>
+
+    <div class="cal-detail" id="cal-detail" hidden></div>
+  </div>
+</section>
 
 <main class="wrap">
 
@@ -439,7 +881,7 @@
   <section class="day-block">
     <div class="day-head"><h2>Rabu</h2><span class="count">1 kelas · 3 SKS</span></div>
 
-    <article class="class" data-day="3" data-from="07:50" data-to="10:20">
+    <article class="class" data-day="3" data-from="07:50" data-to="10:20" data-code="01133" data-room="R5307" data-sks="3" data-type="Tatap Muka" data-group="IF-6/S1/VII">
       <div class="slot">
         <span class="from">07.50</span>
         <span class="to">– 10.20</span>
@@ -466,7 +908,7 @@
   <section class="day-block">
     <div class="day-head"><h2>Kamis</h2><span class="count">2 kelas · 6 SKS</span></div>
 
-    <article class="class" data-day="4" data-from="11:10" data-to="13:40">
+    <article class="class" data-day="4" data-from="11:10" data-to="13:40" data-code="01165" data-room="R5307" data-sks="3" data-type="Tatap Muka" data-group="IF-7/S1/III">
       <div class="slot">
         <span class="from">11.10</span>
         <span class="to">– 13.40</span>
@@ -489,7 +931,7 @@
       </div>
     </article>
 
-    <article class="class" data-day="4" data-from="14:30" data-to="17:00">
+    <article class="class" data-day="4" data-from="14:30" data-to="17:00" data-code="01170" data-room="LAB-5" data-sks="3" data-type="Praktikum" data-group="IF-5/S1/V">
       <div class="slot">
         <span class="from">14.30</span>
         <span class="to">– 17.00</span>
@@ -528,8 +970,24 @@
 (function () {
   "use strict";
 
+  /* =====================================================================
+     KONFIGURASI SEMESTER
+     ---------------------------------------------------------------------
+     SEMESTER_START = tanggal Senin pada minggu ke-1 semester, format
+     "YYYY-MM-DD" (contoh: "2026-09-07").
+
+     Selama nilainya null, nomor minggu TIDAK dihitung dan halaman hanya
+     menampilkan "Minggu ke-?" — tidak ada angka yang dikarang. Isi satu
+     baris di bawah setelah tanggal resmi dari SIAKAD dikonfirmasi.
+     ===================================================================== */
+  var SEMESTER_START = null;
+
   var DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   var SHORT = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+  var MONTHS = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  var MON3 = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+              "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
   /* ---------- theme ---------- */
   var root = document.documentElement;
@@ -548,59 +1006,137 @@
     try { localStorage.setItem("theme", next); } catch (e) {}
   });
 
-  /* ---------- week index ---------- */
-  var week = document.getElementById("week");
-  var today = new Date().getDay();
-  var classes = [].slice.call(document.querySelectorAll(".class"));
-  var busy = {};
-  classes.forEach(function (el) { busy[+el.dataset.day] = (busy[+el.dataset.day] || 0) + 1; });
+  /* ---------- date helpers ---------- */
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function parseISO(s) {
+    var p = s.split("-");
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+  function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function mondayOf(d) {
+    var x = startOfDay(d);
+    return addDays(x, -((x.getDay() + 6) % 7));
+  }
+  function sameDay(a, b) {
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  }
+  function fmtLong(d) {
+    return DAYS[d.getDay()] + ", " + d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function fmtWhen(at, today) {
+    if (sameDay(at, today)) return "hari ini";
+    if (sameDay(at, addDays(today, 1))) return "besok";
+    return SHORT[at.getDay()] + ", " + at.getDate() + " " + MON3[at.getMonth()];
+  }
 
-  [1, 2, 3, 4, 5, 6, 0].forEach(function (d) {
-    var cell = document.createElement("div");
-    var count = busy[d] || 0;
-    cell.className = "week-cell" + (count ? " has" : " empty") + (d === today ? " today" : "");
-    cell.innerHTML = '<span class="wd">' + SHORT[d] + '</span><span class="n">' + (count || "–") + "</span>";
-    cell.title = DAYS[d] + (count ? " · " + count + " kelas" : " · tidak ada kelas");
-    week.appendChild(cell);
-  });
-
-  /* ---------- live status ---------- */
   function minutes(hhmm) {
     var p = hhmm.split(":");
     return +p[0] * 60 + +p[1];
   }
   function clock(m) {
     var h = Math.floor(m / 60), mm = m % 60;
-    return (h < 10 ? "0" : "") + h + "." + (mm < 10 ? "0" : "") + mm;
+    return pad(h) + "." + pad(mm);
+  }
+  function gapText(ms) {
+    var total = Math.max(0, Math.round(ms / 60000));
+    var d = Math.floor(total / 1440); total -= d * 1440;
+    var h = Math.floor(total / 60), m = total % 60;
+    var out = [];
+    if (d) out.push(d + " hari");
+    if (h) out.push(h + " jam");
+    if (m || !out.length) out.push(m + " menit");
+    return out.join(" ");
   }
 
-  var statusBox = document.getElementById("status");
-  var statusText = document.getElementById("status-text");
-  var statusWhen = document.getElementById("status-when");
+  var today = startOfDay(new Date());
 
-  function dayDiff(from, to) { return (to - from + 7) % 7; }
+  /* ---------- jadwal, dibaca dari markup ---------- */
+  var classes = [].slice.call(document.querySelectorAll(".class"));
+  var sessions = classes.map(function (el) {
+    return {
+      el: el,
+      day: +el.dataset.day,
+      from: minutes(el.dataset.from),
+      to: minutes(el.dataset.to),
+      title: el.querySelector("h3").textContent,
+      code: el.dataset.code,
+      room: el.dataset.room,
+      sks: +el.dataset.sks,
+      type: el.dataset.type,
+      group: el.dataset.group
+    };
+  }).sort(function (a, b) { return a.day - b.day || a.from - b.from; });
 
-  function nextUpcoming(day, mins) {
+  function sessionsOn(date) {
+    return sessions.filter(function (s) { return s.day === date.getDay(); });
+  }
+  function at(session, date) {
+    var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    d.setHours(Math.floor(session.from / 60), session.from % 60, 0, 0);
+    return d;
+  }
+  function endOf(session, date) {
+    var d = at(session, date);
+    d.setHours(Math.floor(session.to / 60), session.to % 60, 0, 0);
+    return d;
+  }
+  function nextStart(after) {
+    var base = startOfDay(after);
     var best = null;
-    classes.forEach(function (el) {
-      var d = +el.dataset.day;
-      var from = minutes(el.dataset.from);
-      var offset = dayDiff(day, d);
-      if (offset === 0 && from <= mins) offset = 7;
-      var delta = offset * 1440 + from - mins;
-      if (!best || delta < best.delta) best = { el: el, offset: offset, delta: delta, from: from };
-    });
+    for (var k = 0; k < 8; k++) {
+      var date = addDays(base, k);
+      for (var i = 0; i < sessions.length; i++) {
+        var s = sessions[i];
+        if (s.day !== date.getDay()) continue;
+        var start = at(s, date);
+        if (start.getTime() <= after.getTime()) continue;
+        if (!best || start < best.at) best = { s: s, at: start };
+      }
+      if (best) break;
+    }
     return best;
   }
 
-  function humanGap(delta) {
-    if (delta < 60) return delta + " menit lagi";
-    var h = Math.floor(delta / 60), m = delta % 60;
-    return h + " jam" + (m ? " " + m + " menit" : "") + " lagi";
-  }
+  /* ---------- week index (Sen → Min) ---------- */
+  var week = document.getElementById("week");
+  var busy = {};
+  sessions.forEach(function (s) { busy[s.day] = (busy[s.day] || 0) + 1; });
 
-  function courseName(el) {
-    return '<span class="course">' + el.querySelector("h3").textContent + "</span>";
+  [1, 2, 3, 4, 5, 6, 0].forEach(function (d) {
+    var date = addDays(mondayOf(today), d === 0 ? 6 : d - 1);
+    var count = busy[d] || 0;
+    var cell = document.createElement("button");
+    cell.type = "button";
+    cell.className = "week-cell" + (count ? " has" : " empty") + (sameDay(date, today) ? " today" : "");
+    cell.innerHTML = '<span class="wd">' + SHORT[d] + " " + date.getDate() +
+      '</span><span class="n">' + (count || "–") + "</span>";
+    cell.title = DAYS[d] + " · " + date.getDate() + " " + MON3[date.getMonth()] +
+      (count ? " · " + count + " kelas" : " · tidak ada kelas");
+    if (sameDay(date, today)) cell.setAttribute("aria-current", "date");
+    cell.addEventListener("click", function () {
+      openCalendar(date, "week", true);
+    });
+    week.appendChild(cell);
+  });
+
+  /* ---------- countdown + live status ---------- */
+  var statusBox = document.getElementById("status");
+  var statusText = document.getElementById("status-text");
+  var statusWhen = document.getElementById("status-when");
+  var cellNext = document.getElementById("cell-next");
+  var cellLive = document.getElementById("cell-live");
+  var cellAfter = document.getElementById("cell-after");
+  var nextVal = document.getElementById("next-val");
+  var nextDetail = document.getElementById("next-detail");
+  var liveVal = document.getElementById("live-val");
+  var liveDetail = document.getElementById("live-detail");
+  var afterVal = document.getElementById("after-val");
+  var afterDetail = document.getElementById("after-detail");
+
+  function detailHTML(session, when, start) {
+    return "<b>" + session.title + "</b><br>" + when + " · " + clock(start) + " · " + session.room;
   }
 
   function tick() {
@@ -614,49 +1150,330 @@
       if (label) label.hidden = true;
     });
 
-    var live = null, todayUpcoming = null;
+    var live = null;
 
     classes.forEach(function (el) {
       var from = minutes(el.dataset.from), to = minutes(el.dataset.to);
       if (+el.dataset.day !== day) return;
       if (mins >= from && mins < to) {
         live = el;
-      } else if (from > mins && (!todayUpcoming || from < minutes(todayUpcoming.dataset.from))) {
-        todayUpcoming = el;
       } else if (mins >= to) {
         el.classList.add("past");
       }
     });
 
+    var liveSession = null;
     if (live) {
-      var lt = minutes(live.dataset.to);
+      liveSession = sessions.filter(function (s) { return s.el === live; })[0] || null;
+    }
+
+    var next = nextStart(now);
+    var after = next ? nextStart(next.at) : null;
+
+    /* baris status ringkas */
+    if (liveSession) {
+      var liveEnd = endOf(liveSession, now);
       live.classList.add("live");
       live.querySelector(".live-label").hidden = false;
       statusBox.classList.add("live");
-      statusText.innerHTML = "Sedang berlangsung — " + courseName(live);
-      statusWhen.textContent = "selesai " + clock(lt) + " · sisa " + humanGap(lt - mins).replace(" lagi", "");
-    } else if (todayUpcoming) {
-      var tf = minutes(todayUpcoming.dataset.from);
+      statusText.innerHTML = "Sedang berlangsung — <span class=\"course\">" + liveSession.title + "</span>";
+      statusWhen.textContent = "selesai " + clock(liveSession.to) + " · sisa " + gapText(liveEnd - now);
+    } else if (next && sameDay(next.at, now)) {
       statusBox.classList.remove("live");
-      statusText.innerHTML = "Berikutnya hari ini — " + courseName(todayUpcoming);
-      statusWhen.textContent = "mulai " + clock(tf) + " · " + humanGap(tf - mins);
+      statusText.innerHTML = "Berikutnya hari ini — <span class=\"course\">" + next.s.title + "</span>";
+      statusWhen.textContent = "mulai " + clock(next.s.from) + " · " + gapText(next.at - now);
+    } else if (next) {
+      statusBox.classList.remove("live");
+      statusText.innerHTML = "Berikutnya — <span class=\"course\">" + next.s.title + "</span>";
+      statusWhen.textContent = fmtWhen(next.at, now) + " " + clock(next.s.from) + " · " + gapText(next.at - now);
     } else {
-      var next = nextUpcoming(day, mins);
       statusBox.classList.remove("live");
-      if (!next) {
-        statusText.textContent = "Belum ada jadwal";
-        statusWhen.textContent = "";
+      statusText.textContent = "Belum ada jadwal";
+      statusWhen.textContent = "";
+    }
+
+    /* sel 1: kelas berikutnya */
+    cellNext.className = "c-cell" + (next ? "" : " idle");
+    if (next) {
+      nextVal.textContent = gapText(next.at - now);
+      nextDetail.innerHTML = detailHTML(next.s, fmtWhen(next.at, now), next.s.from);
+    } else {
+      nextVal.textContent = "—";
+      nextDetail.textContent = "Tidak ada kelas tersisa";
+    }
+
+    /* sel 2: kelas yang sedang berjalan */
+    cellLive.className = "c-cell" + (liveSession ? " live" : " idle");
+    if (liveSession) {
+      liveVal.textContent = gapText(endOf(liveSession, now) - now);
+      liveDetail.innerHTML = "<b>" + liveSession.title + "</b><br>berakhir " +
+        clock(liveSession.to) + " · " + liveSession.room;
+    } else {
+      liveVal.textContent = "—";
+      liveDetail.textContent = "Tidak ada kelas saat ini";
+    }
+
+    /* sel 3: jeda ke kelas sesudahnya */
+    var ref = liveSession ? next : after;
+    var prevEnd = liveSession ? endOf(liveSession, now) : (next ? endOf(next.s, next.at) : null);
+
+    if (ref && prevEnd) {
+      cellAfter.className = "c-cell";
+      afterVal.textContent = gapText(ref.at - prevEnd);
+      if (liveSession) {
+        afterDetail.textContent = "kelas ini selesai " + clock(liveSession.to) +
+          " · berikutnya " + clock(ref.s.from) + " · " + ref.s.room;
       } else {
-        var label = next.offset === 1 ? "besok" : next.offset < 7 ? DAYS[+next.el.dataset.day] : "pekan depan";
-        statusText.innerHTML = "Berikutnya — " + courseName(next.el);
-        statusWhen.textContent = label + " " + clock(next.from) + " · " +
-          (next.offset === 0 ? "sudah lewat" : next.delta > 1440 ? Math.round(next.delta / 1440) + " hari lagi" : humanGap(next.delta));
+        afterDetail.innerHTML = detailHTML(ref.s, fmtWhen(ref.at, now), ref.s.from);
       }
+    } else {
+      cellAfter.className = "c-cell idle";
+      afterVal.textContent = "—";
+      afterDetail.textContent = "Tidak ada kelas setelahnya";
     }
   }
 
   tick();
-  setInterval(tick, 30000);
+  setInterval(tick, 1000);
+
+  /* ---------- calendar ---------- */
+  var cal = document.getElementById("calendar");
+  var calToggle = document.getElementById("cal-toggle");
+  var calTitle = document.getElementById("cal-title");
+  var calWeek = document.getElementById("cal-week");
+  var calGrid = document.getElementById("cal-grid");
+  var calMonthBox = document.getElementById("cal-month");
+  var calWeekView = document.getElementById("cal-weekview");
+  var calDetail = document.getElementById("cal-detail");
+  var calPrev = document.getElementById("cal-prev");
+  var calNext = document.getElementById("cal-next");
+  var calToday = document.getElementById("cal-today");
+  var viewButtons = [].slice.call(document.querySelectorAll("[data-view]"));
+
+  var view = "month";
+  var cursor = today;
+  var selected = today;
+
+  function weekNumber(date) {
+    if (!SEMESTER_START) return "Minggu ke-? · tanggal mulai semester belum diisi";
+    var start = parseISO(SEMESTER_START);
+    if (isNaN(start.getTime())) return "Minggu ke-? · SEMESTER_START tidak valid";
+    var diff = Math.round((mondayOf(date) - mondayOf(start)) / 604800000);
+    var n = diff + 1;
+    if (n < 1) return "Belum masuk semester · mulai " + fmtLong(mondayOf(start));
+    return "Minggu ke-" + n;
+  }
+
+  function renderMonth() {
+    var first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+    var last = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0);
+    var gridStart = mondayOf(first);
+    var gridEnd = addDays(mondayOf(last), 6);
+
+    calGrid.textContent = "";
+    for (var d = new Date(gridStart); d <= gridEnd; d = addDays(d, 1)) {
+      var date = new Date(d);
+      var items = sessionsOn(date);
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cal-cell" +
+        (date.getMonth() !== cursor.getMonth() ? " out" : "") +
+        (items.length ? " has" : "") +
+        (sameDay(date, today) ? " today" : "") +
+        (selected && sameDay(date, selected) ? " sel" : "");
+      b.dataset.date = iso(date);
+      b.setAttribute("aria-label", fmtLong(date) +
+        (items.length ? ", " + items.length + " kelas" : ", tidak ada kelas") +
+        (sameDay(date, today) ? ", hari ini" : ""));
+      var html = '<span class="num">' + date.getDate() + "</span>";
+      items.slice(0, 2).forEach(function (s) {
+        html += '<span class="mk">' + clock(s.from) + "</span>";
+      });
+      if (items.length > 2) html += '<span class="mk">+' + (items.length - 2) + "</span>";
+      b.innerHTML = html;
+      b.addEventListener("click", function () {
+        var date = parseISO(this.dataset.date);
+        selected = date;
+        cursor = date;
+        render();
+      });
+      calGrid.appendChild(b);
+    }
+  }
+
+  function renderWeek() {
+    var mon = mondayOf(cursor);
+    var grid = document.createElement("div");
+    grid.className = "cw";
+
+    for (var i = 0; i < 7; i++) {
+      var date = addDays(mon, i);
+      var items = sessionsOn(date);
+      var col = document.createElement("div");
+      col.className = "cw-day" +
+        (items.length ? " has" : " empty") +
+        (sameDay(date, today) ? " today" : "");
+
+      var head = document.createElement("button");
+      head.type = "button";
+      head.className = "cw-head";
+      head.setAttribute("aria-label", fmtLong(date) + (items.length ? ", " + items.length + " kelas" : ", tidak ada kelas"));
+      head.innerHTML = '<span class="wd">' + SHORT[date.getDay()] +
+        '</span><span class="d">' + date.getDate() + " " + MON3[date.getMonth()] +
+        '</span><span class="n">' + (items.length ? items.length + " kelas" : "–") + "</span>";
+      head.addEventListener("click", function () {
+        openCalendar(parseISO(this.dataset.date), "month", false);
+      });
+      head.dataset.date = iso(date);
+      col.appendChild(head);
+
+      if (items.length) {
+        var ul = document.createElement("ul");
+        ul.className = "cw-list";
+        items.forEach(function (s) {
+          var li = document.createElement("li");
+          li.innerHTML = '<span class="t">' + clock(s.from) + "–" + clock(s.to) +
+            '</span><span class="nm">' + s.title +
+            '</span><span class="rm">' + s.room + "</span>";
+          ul.appendChild(li);
+        });
+        col.appendChild(ul);
+      }
+      grid.appendChild(col);
+    }
+
+    calWeekView.textContent = "";
+    calWeekView.appendChild(grid);
+  }
+
+  function renderDetail() {
+    if (view !== "month" || !selected) {
+      calDetail.hidden = true;
+      return;
+    }
+    var items = sessionsOn(selected);
+    var sks = items.reduce(function (n, s) { return n + s.sks; }, 0);
+    calDetail.hidden = false;
+
+    var box = document.createElement("div");
+    box.className = "cd-head";
+    box.innerHTML = "<h3>" + fmtLong(selected) + "</h3>" +
+      '<p class="cd-meta">' + (items.length ? items.length + " kelas · " + sks + " SKS" : "Tidak ada kelas") + "</p>" +
+      '<div class="cd-actions">' +
+        '<button class="btn" type="button" id="cd-prev" title="Hari sebelumnya" aria-label="Hari sebelumnya">‹</button>' +
+        '<button class="btn" type="button" id="cd-week">Buka minggu ini</button>' +
+        '<button class="btn" type="button" id="cd-next" title="Hari berikutnya" aria-label="Hari berikutnya">›</button>' +
+      "</div>";
+
+    var list = "";
+    if (items.length) {
+      list = '<ul class="cd-list">';
+      items.forEach(function (s) {
+        list += "<li><span class=\"t\">" + clock(s.from) + "–" + clock(s.to) + "</span>" +
+          '<span class="nm">' + s.title + "</span>" +
+          '<span class="rm">' + s.room + " · " + s.type + "</span></li>";
+      });
+      list += "</ul>";
+    } else {
+      list = '<p class="cd-empty">Tidak ada kelas pada hari ini.</p>';
+    }
+
+    calDetail.textContent = "";
+    calDetail.appendChild(box);
+    calDetail.insertAdjacentHTML("beforeend", list);
+
+    document.getElementById("cd-prev").addEventListener("click", function () {
+      selected = addDays(selected, -1);
+      cursor = selected;
+      render();
+    });
+    document.getElementById("cd-next").addEventListener("click", function () {
+      selected = addDays(selected, 1);
+      cursor = selected;
+      render();
+    });
+    document.getElementById("cd-week").addEventListener("click", function () {
+      openCalendar(selected, "week", false);
+    });
+  }
+
+  function render() {
+    var monthView = view === "month";
+    calMonthBox.hidden = !monthView;
+    calWeekView.hidden = monthView;
+    viewButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.view === view ? "true" : "false");
+    });
+
+    if (monthView) {
+      calTitle.textContent = MONTHS[cursor.getMonth()] + " " + cursor.getFullYear();
+      calToday.textContent = "Bulan ini";
+      renderMonth();
+    } else {
+      var mon = mondayOf(cursor);
+      var sun = addDays(mon, 6);
+      var title = mon.getMonth() === sun.getMonth()
+        ? mon.getDate() + " – " + sun.getDate() + " " + MON3[sun.getMonth()] + " " + sun.getFullYear()
+        : mon.getDate() + " " + MON3[mon.getMonth()] + " – " + sun.getDate() + " " + MON3[sun.getMonth()] + " " + sun.getFullYear();
+      calTitle.textContent = title;
+      calToday.textContent = "Minggu ini";
+      renderWeek();
+    }
+
+    calWeek.textContent = weekNumber(monthView ? (selected || cursor) : mondayOf(cursor));
+    renderDetail();
+  }
+
+  function openCalendar(date, nextView, scroll) {
+    if (date) {
+      cursor = startOfDay(date);
+      selected = startOfDay(date);
+    }
+    if (nextView) view = nextView;
+    cal.hidden = false;
+    calToggle.setAttribute("aria-expanded", "true");
+    render();
+    if (scroll) cal.scrollIntoView({ block: "start" });
+  }
+
+  function closeCalendar() {
+    cal.hidden = true;
+    calToggle.setAttribute("aria-expanded", "false");
+    calToggle.focus();
+  }
+
+  calToggle.addEventListener("click", function () {
+    if (cal.hidden) openCalendar(today, view, true);
+    else closeCalendar();
+  });
+  calPrev.addEventListener("click", function () {
+    if (view === "month") cursor = new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1);
+    else cursor = addDays(mondayOf(cursor), -7);
+    if (view === "month") selected = cursor;
+    render();
+  });
+  calNext.addEventListener("click", function () {
+    if (view === "month") cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+    else cursor = addDays(mondayOf(cursor), 7);
+    if (view === "month") selected = cursor;
+    render();
+  });
+  calToday.addEventListener("click", function () {
+    cursor = today;
+    selected = today;
+    render();
+  });
+  viewButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      view = b.dataset.view;
+      render();
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !cal.hidden) closeCalendar();
+  });
+
+  render();
 
 })();
 </script>

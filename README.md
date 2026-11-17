@@ -5,6 +5,8 @@ Situs statis satu halaman untuk melihat jadwal kuliah semester 20261 (2026/2027 
 - Tanpa build step, tanpa dependency: hanya `index.html`
 - Tema terang/gelap (ikut setelan sistem, bisa diganti manual, tersimpan di browser)
 - Status langsung: kelas yang sedang berlangsung, kelas berikutnya, dan sisa waktunya
+- Hitung mundur per elemen: kelas berikutnya, sisa waktu kelas berjalan, jeda ke kelas sesudahnya
+- Kalender bulan/minggu yang bisa dibuka dari header, dengan navigasi minggu dan hari
 - Responsif untuk HP dan siap dicetak (Ctrl/Cmd + P)
 
 ## Data
@@ -16,6 +18,18 @@ Situs statis satu halaman untuk melihat jadwal kuliah semester 20261 (2026/2027 
 | Kamis | 14.30–17.00 | 01170 Penerapan Teknologi Internet (3 SKS, Praktikum) | LAB-5 | IF-5/S1/V | Donny Reza, M.Kom |
 
 Sumber: SIAKAD kampus.
+
+## Nomor minggu semester
+
+Nomor minggu ("Minggu ke-3") di kalender dihitung dari konstanta `SEMESTER_START`
+di bagian atas `<script>` pada `index.html`:
+
+```js
+var SEMESTER_START = null; // contoh: "2026-09-07" (tanggal Senin minggu ke-1)
+```
+
+Selama nilainya `null`, kalender menampilkan "Minggu ke-?" dan tidak menebak angka.
+Isi dengan tanggal resmi dari SIAKAD, lalu nomor minggu muncul otomatis.
 
 ## Mengubah jadwal
 
